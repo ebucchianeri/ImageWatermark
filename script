@@ -1,0 +1,49 @@
+#!/bin/bash
+
+if [ $# = 2 ]; then
+   
+   
+   
+   if [ -d "$1" ]; then
+      if [ -d "$2" ]; then
+         # se le due cartelle esistono
+         dir1=($1/*.jpg) # array di immagini nelle due cartelle
+         dir2=($2/*.jpg)
+         corretto=1
+         
+         if [ ${#dir1[@]} = ${#dir2[@]} ]; then  # se il numero dei file nelle 2 cartelle e' uguale procedo
+
+            echo "Both folders have ${#dir1[@]} images"
+
+            for ((i=0;i<${#dir1[@]};i++)); do     # scorro i file nelle due cartelle e confronto se hanno la stessa checksum
+               output1=( $(md5sum ${dir1[i]}) )
+               output2=( $(md5sum ${dir2[i]}) )
+               
+               #echo ${output1[0]} ${output2[0]}
+               if [ ${output1[0]} != ${output2[0]} ]; then
+                  corretto=0
+                  break
+               fi
+               
+            done
+            
+            if [ $corretto = 1 ]; then
+               echo "Same files in the two folders"
+            else 
+               echo "NOT same files in the two folders"
+            fi
+         else
+            echo "NOT same files number in the two folders"
+         fi
+      else
+         echo " $2 does not exist"
+      fi
+   else
+      echo " $1 does not exist"
+   fi
+   
+   
+   
+else
+   echo "To execute the script: ./script nomecartella1 nomecartella2"
+fi

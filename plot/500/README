@@ -1,0 +1,38 @@
+TO SEE PLOTS:
+gnuplot:
+
+load "plot_TC.plt"
+load "plot_speedup.plt"
+load "plot_scalab.plt"
+load "plot_efficiency.plt"
+
+
+-------------------------------------------
+HOW PLOTS HAVE BEEN BUILT
+
+From the output of trials with 500 images we get 2 files of completion times plus the file with the times from the model: 
+      completion_time_THR_500.txt
+      completion_time_THRNORR_500.txt
+      completion_time_FF_500.txt
+      completion_time_MODEL_500.txt
+
+
+In order to generate files containing speedup, scalability and efficiency used by the 3 gnuplot script:
+
+
+Speedup files:
+
+   awk '{print $1, Tc_sequenziale/$2}' completion_time_(FF|THR|THRNORR|MODEL)_500.txt > speedup_(FF|THR|THRNORR|MODEL)_500.txt
+
+
+Efficiency files:
+     
+   awk '{print $1, $2/$1}' speedup_(FF|THR|THRNORR|MODEL)_500.txt > efficiency_(FF|THR|THRNORR|MODEL)_500.txt   
+
+
+Scalability files:
+     
+   awk '{print $1, Tpar[1]/$2}' completion_time_(FF|THR|THRNORR|MODEL)_500.txt > scalab_(FF|THR|THRNORR|MODEL)_500.txt  
+            
+            
+        
